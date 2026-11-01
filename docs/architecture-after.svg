@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="student-board-architecture-aws-root" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="student-board-architecture-aws-title student-board-architecture-aws-desc">
-<title id="student-board-architecture-aws-title">학생 질문 게시판 — Firecrab 서비스 아키텍처</title>
-<desc id="student-board-architecture-aws-desc">학생이 고정 운영 주소와 Cloudflare Quick Tunnel을 통해 Firecrab의 게시판 MicroVM에 접속하고, 게시판은 PostgreSQL에 데이터를 저장하며, AI로 수정한 코드를 Docker 이미지로 빌드하여 새 버전으로 배포하는 제안 구조이다.</desc>
+<title id="student-board-architecture-aws-title">학생 질문 게시판 — Firecrab 배포 이후 아키텍처</title>
+<desc id="student-board-architecture-aws-desc">학생과 심사위원이 고정 운영 주소와 Cloudflare Quick Tunnel을 거쳐 Firecrab의 게시판 MicroVM에 접속한다. 게시판은 PostgreSQL에 데이터를 저장한다. AI Sandbox로 고친 코드를 Docker 이미지로 만들어 새 버전으로 배포한다.</desc>
 <defs>
       <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
       #student-board-architecture-aws-root { color: #232f3e; font-family: Arial, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
@@ -20,7 +20,7 @@
       #student-board-architecture-aws-root .source-note { font-size: 10px; fill: #687078; }
       #student-board-architecture-aws-root .request-path { stroke: #545b64; stroke-width: 1.6; fill: none; }
       #student-board-architecture-aws-root .deploy-path { stroke: #687078; stroke-width: 1.5; stroke-dasharray: 6 4; fill: none; }
-      #student-board-architecture-aws-root .diagram-container { overflow-x: visible; }</style>
+      #student-board-architecture-aws-root .diagram-container { overflow-x: visible; }      #student-board-architecture-aws-root .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.3px; fill: #687078; }</style>
   <marker id="student-board-architecture-aws-arrow" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto"><path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#545b64" stroke-width="1.25"/></marker>
   <marker id="student-board-architecture-aws-arrow-deploy" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto"><path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#687078" stroke-width="1.25"/></marker>
   <symbol id="student-board-architecture-aws-icon-Users" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -56,9 +56,9 @@
 <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
 <rect x="48" y="36" width="4" height="64" fill="#ff9900"/>
 <text x="68" y="48" class="eyebrow" text-anchor="start">FIRECRAB  /  STUDENT Q&amp;A</text>
-<text x="68" y="92" class="diagram-title" text-anchor="start">학생 질문 게시판 아키텍처</text>
-<text x="68" y="124" class="subtitle" text-anchor="start">Docker 이미지로 준비하고, Firecrab 콘솔에서 공개·개선하는 서비스</text>
-<text x="1232" y="48" class="eyebrow" text-anchor="end">ARCHITECTURE PROPOSAL</text>
+<text x="68" y="92" class="diagram-title" text-anchor="start">Firecrab 배포 이후</text>
+<text x="68" y="124" class="subtitle" text-anchor="start">고정 주소로 누구나 접속하고, AI로 고친 새 버전을 콘솔에서 배포한다</text>
+<text x="1232" y="48" class="eyebrow" text-anchor="end">AFTER</text>
 
 <!-- Boundaries: the actual implementation, not AWS deployment targets. -->
 <rect x="424" y="208" width="612" height="228" fill="#fffaf2" stroke="#d78a18" stroke-width="1.5"/>
@@ -144,7 +144,7 @@
 <text x="776" y="588" class="technical" text-anchor="start">firecrab-demo-webapp:v2</text>
 
 <!-- Brief implementation notes and legend -->
-<text x="48" y="652" class="sublabel" text-anchor="start">로컬 확인: Docker Compose로 게시판 앱 + PostgreSQL 실행</text>
+<text x="48" y="652" class="sublabel" text-anchor="start">이전 구조와 같은 Docker 이미지를 그대로 사용한다</text>
 <text x="1232" y="652" class="sublabel" text-anchor="end">AI 미리보기는 별도 DB 사용</text>
 <line x1="48" y1="672" x2="1232" y2="672" stroke="#d5d9dd" stroke-width="1"/>
 <path d="M 48 694 H 80" class="request-path" marker-end="url(#student-board-architecture-aws-arrow)"/>

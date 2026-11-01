@@ -7,12 +7,35 @@
 
 ## 아키텍처
 
-![학생 질문 게시판 아키텍처](docs/architecture.png)
+같은 Docker 이미지를 Firecrab에 배포하기 전과 후로 나누어 보여 준다.
+
+### 이전: 로컬 Docker Compose
+
+![Firecrab 배포 이전 아키텍처](docs/architecture-before.png)
+
+1. 개발자 Mac의 Docker Compose에서 앱 컨테이너와 PostgreSQL 컨테이너를 실행한다.
+2. `localhost:3000`으로만 접속한다. 학생과 심사위원은 링크로 접속할 수 없다.
+3. 기능을 바꾸면 개발자가 직접 코드를 고치고, 테스트하고, 다시 빌드한다.
+
+### 이후: Firecrab 배포
+
+![Firecrab 배포 이후 아키텍처](docs/architecture-after.png)
 
 1. 학생과 심사위원은 `*.firecrab.dev` 고정 운영 주소로 접속한다. Firecrab Tunnel이 Cloudflare Quick Tunnel을 거쳐 Firecrab 관리 호스트의 Nginx로 연결한다. Nginx는 게시판 MicroVM으로 요청을 보낸다. 게시판은 PostgreSQL에 질문을 저장한다.
 2. AI Sandbox에서 코드를 고치고 테스트와 미리보기를 거친다. 반영한 코드로 Docker 이미지를 만들어 OCI 이미지 저장소에 올린다. Firecrab 콘솔에서 **Deploy update**로 새 버전을 배포한다.
 
-원본은 `docs/architecture.svg`와 `docs/architecture.html`이다. 아이콘은 AWS General Resource Icons를 사용했다.
+### 바뀌는 점
+
+| 항목 | 이전 | 이후 |
+| --- | --- | --- |
+| 접속 주소 | `localhost:3000` | `*.firecrab.dev` 고정 주소 |
+| 접속할 수 있는 사람 | 개발자 Mac 사용자 | 링크를 받은 누구나 |
+| 실행 위치 | Docker 컨테이너 | Firecrab MicroVM |
+| 기능 수정 | 개발자가 직접 | AI Sandbox가 수정·테스트 |
+| 배포 전 확인 | 없음 | 앱 미리보기 |
+| 새 버전 반영 | `docker compose up --build` | 콘솔의 **Deploy update** |
+
+원본은 `docs/architecture-before.svg`와 `docs/architecture-after.svg`이다. 아이콘은 AWS General Resource Icons를 사용했다.
 
 ## 구성
 

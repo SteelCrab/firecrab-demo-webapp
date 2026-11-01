@@ -1,162 +1,133 @@
-<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>학생 질문 게시판 — Firecrab 아키텍처</title>
-<style>
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body { background: #ffffff; color: #232f3e; font-family: Arial, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
-.frame { width: 1280px; max-width: 100%; min-width: 0; margin: 0 auto; }
-.diagram-container { width: 100%; overflow-x: auto; }
-svg { display: block; width: 1280px; min-width: 1280px; height: 720px; }
-svg text { fill: #232f3e; font-family: Arial, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
-.diagram-title { font-size: 40px; font-weight: 700; letter-spacing: -1.2px; }
-.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.3px; fill: #687078; }
-.subtitle { font-size: 16px; fill: #545b64; }
-.node-name { font-size: 16px; font-weight: 600; }
-.sublabel { font-size: 12px; fill: #545b64; }
-.technical { font-size: 12px; font-family: Menlo, Consolas, monospace; fill: #545b64; }
-.zone-title { font-size: 14px; font-weight: 600; }
-.section-title { font-size: 16px; font-weight: 600; }
-.section-number { font-size: 14px; font-weight: 600; fill: #ffffff; }
-.edge-label { font-size: 12px; fill: #545b64; }
-.legend { font-size: 11px; fill: #545b64; }
-.source-note { font-size: 10px; fill: #687078; }
-.request-path { stroke: #545b64; stroke-width: 1.6; fill: none; }
-.deploy-path { stroke: #687078; stroke-width: 1.5; stroke-dasharray: 6 4; fill: none; }
-@media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; width: 100%; height: auto; } }
-</style></head><body><main class="frame"><div class="diagram-container"><svg id="student-board-architecture-aws-root" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="student-board-architecture-aws-title student-board-architecture-aws-desc">
-<title id="student-board-architecture-aws-title">학생 질문 게시판 — Firecrab 서비스 아키텍처</title>
-<desc id="student-board-architecture-aws-desc">학생이 고정 운영 주소와 Cloudflare Quick Tunnel을 통해 Firecrab의 게시판 MicroVM에 접속하고, 게시판은 PostgreSQL에 데이터를 저장하며, AI로 수정한 코드를 Docker 이미지로 빌드하여 새 버전으로 배포하는 제안 구조이다.</desc>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="student-board-architecture-aws-root" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="student-board-architecture-aws-title student-board-architecture-aws-desc">
+<title id="student-board-architecture-aws-title">학생 질문 게시판 — Firecrab 배포 이전 아키텍처</title>
+<desc id="student-board-architecture-aws-desc">개발자 Mac의 Docker Compose에서 게시판 앱 컨테이너와 PostgreSQL 컨테이너를 실행한다. localhost로만 접속할 수 있다. 기능을 바꾸면 개발자가 직접 수정, 테스트, 다시 빌드한다.</desc>
 <defs>
-  <marker id="arrow" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto"><path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#545b64" stroke-width="1.25"/></marker>
-  <marker id="arrow-deploy" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto"><path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#687078" stroke-width="1.25"/></marker>
-  <symbol id="icon-Users" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
+      #student-board-architecture-aws-root { color: #232f3e; font-family: Arial, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+      #student-board-architecture-aws-root .diagram-container { width: 100%; overflow-x: auto; }
+      #student-board-architecture-aws-root text { fill: #232f3e; font-family: Arial, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+      #student-board-architecture-aws-root .diagram-title { font-size: 40px; font-weight: 700; letter-spacing: -1.2px; }
+      #student-board-architecture-aws-root .subtitle { font-size: 16px; fill: #545b64; }
+      #student-board-architecture-aws-root .node-name { font-size: 16px; font-weight: 600; }
+      #student-board-architecture-aws-root .sublabel { font-size: 12px; fill: #545b64; }
+      #student-board-architecture-aws-root .technical { font-size: 12px; font-family: Menlo, Consolas, monospace; fill: #545b64; }
+      #student-board-architecture-aws-root .zone-title { font-size: 14px; font-weight: 600; }
+      #student-board-architecture-aws-root .section-title { font-size: 16px; font-weight: 600; }
+      #student-board-architecture-aws-root .section-number { font-size: 14px; font-weight: 600; fill: #ffffff; }
+      #student-board-architecture-aws-root .edge-label { font-size: 12px; fill: #545b64; }
+      #student-board-architecture-aws-root .legend { font-size: 11px; fill: #545b64; }
+      #student-board-architecture-aws-root .source-note { font-size: 10px; fill: #687078; }
+      #student-board-architecture-aws-root .request-path { stroke: #545b64; stroke-width: 1.6; fill: none; }
+      #student-board-architecture-aws-root .deploy-path { stroke: #687078; stroke-width: 1.5; stroke-dasharray: 6 4; fill: none; }
+      #student-board-architecture-aws-root .diagram-container { overflow-x: visible; }      #student-board-architecture-aws-root .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.3px; fill: #687078; }</style>
+  <marker id="student-board-architecture-aws-arrow" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto"><path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#545b64" stroke-width="1.25"/></marker>
+  <marker id="student-board-architecture-aws-arrow-deploy" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto"><path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#687078" stroke-width="1.25"/></marker>
+  <symbol id="student-board-architecture-aws-icon-Users" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M28.639,9.286 C28.639,6.371 31.052,4 34.019,4 C36.985,4 39.397,6.371 39.397,9.286 C39.397,12.201 36.985,14.572 34.019,14.572 C31.052,14.572 28.639,12.201 28.639,9.286 L28.639,9.286 Z M40.163,16.334 C39.516,15.932 38.833,15.6 38.128,15.333 C40.098,14.023 41.397,11.802 41.397,9.286 C41.397,5.269 38.087,2 34.019,2 C29.95,2 26.639,5.269 26.639,9.286 C26.639,11.796 27.932,14.014 29.895,15.325 C28.614,15.808 27.41,16.515 26.349,17.425 L27.652,18.943 C29.434,17.414 31.689,16.572 34,16.572 C35.802,16.572 37.569,17.077 39.109,18.033 C41.849,19.735 43.647,22.725 43.953,26 L34,26 L34,28 L45,28 C45.553,28 46,27.553 46,27 C46,22.657 43.764,18.57 40.163,16.334 L40.163,16.334 Z M8.639,9.286 C8.639,6.371 11.052,4 14.019,4 C16.985,4 19.397,6.371 19.397,9.286 C19.397,12.201 16.985,14.572 14.019,14.572 C11.052,14.572 8.639,12.201 8.639,9.286 L8.639,9.286 Z M14,26 L4.046,26 C4.53,20.717 8.81,16.572 14,16.572 C15.802,16.572 17.569,17.077 19.109,18.033 C19.541,18.302 19.958,18.608 20.349,18.943 L21.652,17.426 C21.184,17.024 20.684,16.657 20.163,16.334 C19.516,15.932 18.833,15.6 18.128,15.333 C20.098,14.023 21.397,11.802 21.397,9.286 C21.397,5.269 18.087,2 14.019,2 C9.95,2 6.639,5.269 6.639,9.286 C6.639,11.801 7.937,14.023 9.907,15.332 C5.302,17.071 2,21.638 2,27 C2,27.553 2.448,28 3,28 L14,28 L14,26 Z M14.046,44 C14.53,38.717 18.81,34.572 24,34.572 C25.802,34.572 27.569,35.077 29.109,36.033 C31.849,37.735 33.647,40.725 33.953,44 L14.046,44 Z M18.639,27.286 C18.639,24.371 21.052,22 24.019,22 C26.985,22 29.397,24.371 29.397,27.286 C29.397,30.201 26.985,32.572 24.019,32.572 C21.052,32.572 18.639,30.201 18.639,27.286 L18.639,27.286 Z M30.163,34.334 C29.516,33.932 28.833,33.6 28.128,33.333 C30.098,32.023 31.397,29.802 31.397,27.286 C31.397,23.269 28.087,20 24.019,20 C19.95,20 16.639,23.269 16.639,27.286 C16.639,29.801 17.937,32.023 19.907,33.332 C15.302,35.071 12,39.638 12,45 C12,45.553 12.448,46 13,46 L35,46 C35.553,46 36,45.553 36,45 C36,40.657 33.764,36.57 30.163,34.334 L30.163,34.334 Z" fill="#242F3E" />
     </g>
-</symbol><symbol id="icon-Globe" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+</symbol><symbol id="student-board-architecture-aws-icon-Globe" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M37.322,9.762 C35.937,10.442 34.302,11.002 32.486,11.419 C31.664,8.711 30.55,6.477 29.222,4.86 C32.32,5.813 35.091,7.518 37.322,9.762 L37.322,9.762 Z M34.033,22 C33.969,18.854 33.609,15.932 33,13.344 C35.153,12.843 37.088,12.154 38.693,11.305 C41.086,14.281 42.615,17.97 42.924,22 L34.033,22 Z M32.71,33.883 C33.491,30.974 33.958,27.619 34.033,24 L42.974,24 C42.859,28.507 41.226,32.644 38.543,35.894 C36.898,35.047 34.906,34.372 32.71,33.883 L32.71,33.883 Z M32.13,35.796 C33.997,36.201 35.685,36.753 37.117,37.432 C34.744,39.752 31.78,41.458 28.477,42.332 C29.937,40.817 31.185,38.573 32.13,35.796 L32.13,35.796 Z M16.034,35.949 C17.043,38.858 18.385,41.179 19.956,42.662 C16.39,42.003 13.171,40.371 10.565,38.053 C12.033,37.179 13.903,36.466 16.034,35.949 L16.034,35.949 Z M14.078,24 C14.154,27.688 14.639,31.101 15.446,34.047 C12.96,34.664 10.784,35.534 9.105,36.608 C6.051,33.257 4.149,28.851 4.025,24 L14.078,24 Z M15.151,13.164 C14.517,15.795 14.144,18.782 14.078,22 L4.076,22 C4.411,17.628 6.192,13.663 8.944,10.569 C10.578,11.65 12.706,12.531 15.151,13.164 L15.151,13.164 Z M15.673,11.248 C13.6,10.717 11.786,9.998 10.373,9.122 C12.822,6.884 15.833,5.26 19.178,4.499 C17.748,6.103 16.55,8.418 15.673,11.248 L15.673,11.248 Z M16.078,22 C16.143,18.838 16.506,16.016 17.089,13.604 C19.377,14.047 21.87,14.286 24.444,14.286 C26.733,14.286 28.966,14.095 31.051,13.739 C31.616,16.121 31.969,18.895 32.033,22 L16.078,22 Z M30.163,35.434 C28.599,39.881 26.284,42.5 24.055,42.5 C21.845,42.5 19.548,39.926 17.984,35.545 C19.998,35.193 22.181,35 24.444,35 C26.427,35 28.35,35.157 30.163,35.434 L30.163,35.434 Z M24.444,33 C21.98,33 19.593,33.222 17.387,33.629 C16.635,30.909 16.076,27.658 16,24 L32,24 C31.925,27.603 31.49,30.811 30.757,33.506 C28.755,33.181 26.627,33 24.444,33 L24.444,33 Z M24.482,4.05 C26.749,4.362 29.065,7.121 30.528,11.801 C28.612,12.115 26.559,12.286 24.444,12.286 C22.047,12.286 19.736,12.073 17.624,11.68 C19.146,6.899 21.559,4.147 23.887,4.02 C24.087,4.024 24.284,4.04 24.482,4.05 L24.482,4.05 Z M24.636,2.058 C24.443,2.036 24.252,2 24.055,2 C23.992,2 23.931,2.016 23.868,2.019 C23.744,2.017 23.624,2 23.5,2 C11.645,2 2,11.645 2,23.5 C2,35.355 11.645,45 23.5,45 C35.355,45 45,35.355 45,23.5 C45,12.028 35.961,2.654 24.636,2.058 L24.636,2.058 Z" fill="#232F3D" />
     </g>
-</symbol><symbol id="icon-Internet" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+</symbol><symbol id="student-board-architecture-aws-icon-Internet" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M34.59,29.7893333 L30.997,33.3813333 L30.997,21.7593333 L28.997,21.7593333 L28.997,33.2703333 L25.556,29.7733333 L24.13,31.1763333 L29.325,36.4553333 C29.513,36.6453333 29.768,36.7533333 30.034,36.7543333 L30.038,36.7543333 C30.303,36.7543333 30.558,36.6483333 30.745,36.4613333 L36.004,31.2033333 L34.59,29.7893333 Z M22.35,27.7243333 L23.764,26.3103333 L18.506,21.0523333 C18.319,20.8643333 18.065,20.7593333 17.799,20.7593333 L17.795,20.7593333 C17.528,20.7603333 17.274,20.8673333 17.086,21.0583333 L11.89,26.3363333 L13.316,27.7383333 L16.757,24.2433333 L16.757,37.5543333 L18.757,37.5543333 L18.757,24.1313333 L22.35,27.7243333 Z M20.333,37.5723333 L27.4,37.5793333 L27.402,35.5793333 L20.335,35.5723333 L20.333,37.5723333 Z M46.026,29.1303333 C46.026,31.6173333 45.272,33.6283333 43.783,35.1053333 C41.332,37.5403333 37.776,37.5903333 37.496,37.5903333 L37.484,37.5903333 L32.721,37.5853333 L32.723,35.5853333 L37.491,35.5903333 C37.531,35.5903333 40.489,35.5693333 42.385,33.6763333 C43.474,32.5883333 44.026,31.0593333 44.026,29.1303333 C44.026,27.9483333 43.701,26.1793333 40.896,24.4603333 C39.422,23.5573333 38.041,23.2593333 37.517,23.1743333 C36.986,23.0873333 36.622,22.5993333 36.685,22.0693333 C36.507,19.9743333 35.526,18.5083333 33.982,18.0403333 C32.647,17.6363333 31.218,18.1083333 30.337,19.2443333 C30.116,19.5313333 29.763,19.6773333 29.396,19.6203333 C29.036,19.5653333 28.736,19.3203333 28.61,18.9793333 C27.992,17.3143333 27.099,15.9173333 25.955,14.8233333 C24.545,13.4753333 20.675,10.5743333 15.204,12.7843333 C12.069,14.0513333 9.611,17.6893333 9.611,21.0673333 C9.611,21.4443333 9.635,21.8223333 9.682,22.1893333 C9.743,22.6733333 9.446,23.1313333 8.981,23.2723333 C8.943,23.2843333 8.903,23.2933333 8.865,23.3003333 C7.02,23.7643333 4,25.1573333 4,29.2983333 C4,32.4433333 5.799,34.1823333 7.308,35.0873333 C7.823,35.3963333 8.419,35.5603333 9.029,35.5613333 L15.181,35.5673333 L15.179,37.5673333 L9.028,37.5613333 C8.055,37.5603333 7.104,37.2983333 6.278,36.8023333 C4.681,35.8443333 2,33.5953333 2,29.2983333 C2,25.5833333 4.084,22.7513333 7.623,21.5793333 C7.615,21.4093333 7.611,21.2383333 7.611,21.0673333 C7.611,16.8633333 10.554,12.5053333 14.456,10.9303333 C19.001,9.09333332 23.817,10.0113333 27.338,13.3783333 C28.37,14.3643333 29.228,15.5503333 29.897,16.9143333 C31.234,15.9453333 32.938,15.6373333 34.562,16.1263333 C36.751,16.7903333 38.234,18.7233333 38.615,21.3603333 C39.748,21.6423333 40.925,22.1323333 41.941,22.7553333 C44.69,24.4383333 46.026,26.5243333 46.026,29.1303333 L46.026,29.1303333 Z" fill="#232F3D" />
     </g>
-</symbol><symbol id="icon-Server" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+</symbol><symbol id="student-board-architecture-aws-icon-Server" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M15.437,21.52 L32.064,21.52 L32.064,19.52 L15.437,19.52 L15.437,21.52 Z M15.437,17.196 L32.064,17.196 L32.064,15.196 L15.437,15.196 L15.437,17.196 Z M15.437,12.762 L32.064,12.762 L32.064,10.762 L15.437,10.762 L15.437,12.762 Z M15.437,8.494 L32.064,8.494 L32.064,6.494 L15.437,6.494 L15.437,8.494 Z M13,44.013 L34.499,44.013 L34.499,4 L13,4 L13,44.013 Z M35.032,2 L12.468,2 C11.659,2 11,2.659 11,3.469 L11,44.545 C11,45.355 11.659,46.013 12.468,46.013 L35.032,46.013 C35.841,46.013 36.499,45.355 36.499,44.545 L36.499,3.469 C36.499,2.659 35.841,2 35.032,2 L35.032,2 Z" fill="#232F3D" />
     </g>
-</symbol><symbol id="icon-Generic-Application" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+</symbol><symbol id="student-board-architecture-aws-icon-Generic-Application" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M37,35 L46,35 L46,37 L37,37 L37,46 L35,46 L35,37 L26,37 L26,35 L35,35 L35,26 L37,26 L37,35 Z M4,44 L20,44 L20,28 L4,28 L4,44 Z M21,26 L3,26 C2.447,26 2,26.448 2,27 L2,45 C2,45.552 2.447,46 3,46 L21,46 C21.553,46 22,45.552 22,45 L22,27 C22,26.448 21.553,26 21,26 L21,26 Z M28,20 L44,20 L44,4 L28,4 L28,20 Z M45,2 L27,2 C26.447,2 26,2.448 26,3 L26,21 C26,21.552 26.447,22 27,22 L45,22 C45.553,22 46,21.552 46,21 L46,3 C46,2.448 45.553,2 45,2 L45,2 Z M4,20 L20,20 L20,4 L4,4 L4,20 Z M21,2 L3,2 C2.447,2 2,2.448 2,3 L2,21 C2,21.552 2.447,22 3,22 L21,22 C21.553,22 22,21.552 22,21 L22,3 C22,2.448 21.553,2 21,2 L21,2 Z" fill="#232F3D" />
     </g>
-</symbol><symbol id="icon-Database" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+</symbol><symbol id="student-board-architecture-aws-icon-Database" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M31.755,43.307 C30.506,43.519 29.176,43.677 27.801,43.777 C27.244,43.817 26.678,43.847 26.105,43.869 C24.954,43.908 23.754,43.908 22.608,43.869 C22.033,43.847 21.467,43.817 20.91,43.777 C19.535,43.677 18.205,43.519 16.956,43.307 C12.049,42.475 9,40.73 9,38.754 L9,10.765 C11.997,12.661 17.74,13.841 24.356,13.841 C30.966,13.841 36.636,12.68 39.645,10.803 L39.645,38.754 C39.645,40.767 36.695,42.469 31.755,43.307 M24.356,4 C32.896,4 38.476,6.184 39.47,8.432 C37.802,10.098 32.46,11.841 24.356,11.841 C16.26,11.841 10.828,10.061 9.207,8.408 L9.171,8.443 C10.155,6.191 15.765,4 24.356,4 M24.356,2 C14.137,2 7,4.938 7,9.145 L7,38.754 C7,40.581 8.25,43.86 16.622,45.28 C17.933,45.501 19.327,45.667 20.766,45.771 C21.346,45.813 21.936,45.845 22.536,45.867 C23.134,45.888 23.741,45.899 24.356,45.899 C24.97,45.899 25.576,45.888 26.176,45.867 C26.776,45.845 27.365,45.813 27.945,45.771 C29.384,45.667 30.778,45.501 32.089,45.28 C40.403,43.869 41.645,40.586 41.645,38.754 L41.645,9.145 C41.645,4.938 34.535,2 24.356,2" fill="#232F3D" />
     </g>
-</symbol><symbol id="icon-Source-Code" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+</symbol><symbol id="student-board-architecture-aws-icon-Source-Code" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M25.0518,19.684 L26.9478,20.317 L22.9478,32.317 L21.0518,31.684 L25.0518,19.684 Z M34.6248,25.22 C34.8628,25.409 34.9998,25.697 34.9998,26 C34.9998,26.304 34.8628,26.592 34.6248,26.781 L29.6248,30.781 L28.3748,29.22 L32.3998,26 L28.3748,22.781 L29.6248,21.22 L34.6248,25.22 Z M19.6248,22.781 L15.6008,26 L19.6248,29.22 L18.3748,30.781 L13.3748,26.781 C13.1378,26.592 12.9998,26.304 12.9998,26 C12.9998,25.697 13.1378,25.409 13.3748,25.22 L18.3748,21.22 L19.6248,22.781 Z M9.9998,44 L10.0068,4 L27.9998,4 L27.9998,13 C27.9998,13.552 28.4478,14 28.9998,14 L37.9998,14 L37.9998,44 L9.9998,44 Z M29.9998,5.414 L36.5858,12 L29.9998,12 L29.9998,5.414 Z M39.7068,12.293 L29.7068,2.293 C29.5198,2.105 29.2658,2 28.9998,2 L9.9998,2 C8.8228,2 7.9998,2.822 7.9998,4 L7.9998,44 C7.9998,45.14 8.8598,46 9.9998,46 L37.9998,46 C39.1408,46 39.9998,45.14 39.9998,44 L39.9998,13 C39.9998,12.734 39.8948,12.48 39.7068,12.293 L39.7068,12.293 Z" fill="#232F3D" />
     </g>
-</symbol><symbol id="icon-Toolkit" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+</symbol><symbol id="student-board-architecture-aws-icon-Toolkit" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M32.438,34.203 L25.12,26.884 L26.957,25.047 L34.275,32.366 L32.438,34.203 Z M13.922,14.201 L14.273,13.85 L17.117,15.924 L15.996,17.045 L13.922,14.201 Z M27.664,22.926 C27.289,22.551 26.625,22.551 26.25,22.926 L25.331,23.845 L18.677,17.191 L19.357,16.512 C19.564,16.305 19.669,16.018 19.647,15.727 C19.625,15.435 19.475,15.169 19.239,14.997 L14.759,11.73 C14.362,11.441 13.812,11.483 13.463,11.831 L11.903,13.391 C11.554,13.74 11.511,14.29 11.802,14.687 L15.069,19.167 C15.241,19.403 15.507,19.553 15.799,19.575 C15.825,19.577 15.851,19.578 15.876,19.578 C16.141,19.578 16.395,19.474 16.584,19.285 L17.263,18.605 L23.917,25.259 L22.999,26.177 C22.608,26.567 22.608,27.2 22.999,27.591 L31.731,36.324 C31.918,36.512 32.172,36.617 32.438,36.617 C32.704,36.617 32.958,36.512 33.145,36.324 L36.396,33.073 C36.787,32.682 36.787,32.05 36.396,31.659 L27.664,22.926 Z M27.176,17.271 C26.874,15.72 27.359,14.077 28.492,12.944 C29.939,11.494 32.154,11.125 34,12.022 C34.29,12.164 34.495,12.437 34.548,12.756 C34.602,13.075 34.498,13.4 34.269,13.629 L32.786,15.112 L33.115,15.442 L34.596,13.961 C34.825,13.732 35.149,13.629 35.467,13.682 C35.786,13.734 36.059,13.937 36.201,14.227 C37.105,16.069 36.738,18.282 35.286,19.733 C34.133,20.886 32.517,21.364 30.953,21.05 L29.25,22.754 L27.836,21.34 L29.946,19.228 C30.214,18.959 30.613,18.867 30.976,18.989 C32.001,19.34 33.109,19.081 33.872,18.319 C34.315,17.876 34.584,17.311 34.666,16.72 L33.821,17.564 C33.633,17.752 33.379,17.857 33.114,17.857 L33.113,17.857 C32.847,17.857 32.593,17.752 32.406,17.563 L30.665,15.817 C30.275,15.427 30.275,14.794 30.666,14.404 L31.505,13.564 C30.913,13.646 30.348,13.916 29.906,14.358 C29.155,15.109 28.892,16.244 29.236,17.248 C29.359,17.609 29.266,18.01 28.997,18.279 L25.261,22.015 L23.847,20.6 L27.176,17.271 Z M22.828,29.18 L21.124,30.885 C21.425,32.438 20.938,34.082 19.8,35.213 C18.884,36.134 17.658,36.619 16.414,36.619 C15.696,36.619 14.971,36.458 14.296,36.126 C14.007,35.983 13.804,35.71 13.751,35.391 C13.699,35.073 13.802,34.749 14.031,34.521 L15.512,33.04 L15.185,32.713 L13.704,34.194 C13.475,34.423 13.147,34.524 12.834,34.474 C12.515,34.421 12.242,34.218 12.099,33.929 C11.193,32.088 11.561,29.875 13.014,28.423 C14.147,27.285 15.79,26.799 17.341,27.105 L20.674,23.773 L22.088,25.187 L18.348,28.927 C18.078,29.197 17.675,29.29 17.315,29.165 C16.312,28.817 15.179,29.08 14.43,29.835 C13.985,30.279 13.714,30.845 13.633,31.436 L14.478,30.592 C14.869,30.201 15.501,30.201 15.892,30.592 L17.633,32.333 C18.024,32.724 18.024,33.356 17.633,33.747 L16.787,34.594 C17.379,34.514 17.944,34.243 18.386,33.799 C19.143,33.046 19.408,31.913 19.064,30.907 C18.941,30.547 19.034,30.146 19.303,29.877 L21.414,27.766 L22.828,29.18 Z M41.243,34.008 L24.095,43.846 L7.003,33.915 L7.057,14.146 L24.204,4.308 L41.295,14.24 L41.243,34.008 Z M24.209,2 L5.061,12.986 L5,35.063 L24.089,46.154 L43.239,35.168 L43.299,13.092 L24.209,2 Z" fill="#232F3D" />
     </g>
-</symbol><symbol id="icon-Folders" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+</symbol><symbol id="student-board-architecture-aws-icon-Folders" viewBox="0 0 48 48"><g xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M46,14 L46,43 C46,43.552 45.553,44 45,44 L10,44 C9.447,44 9,43.552 9,43 L9,40.002 L11,40.002 L11,42 L44,42 L44,15 L42.004,15 L42.004,13 L45,13 C45.553,13 46,13.448 46,14 L46,14 Z M4,36 L38.001,36 L38.001,14 L4,14 L4,36 Z M14.586,6 L17.294,8.708 C17.481,8.896 17.735,9.001 18.001,9.001 L38.001,9.001 L38.001,12 L4,12 L4,6 L14.586,6 Z M40.001,8.001 C40.001,7.449 39.554,7.001 39.001,7.001 L18.415,7.001 L15.707,4.293 C15.52,4.105 15.266,4 15,4 L3,4 C2.447,4 2,4.448 2,5 L2,37 C2,37.552 2.447,38 3,38 L39.001,38 C39.554,38 40.001,37.552 40.001,37 L40.001,8.001 Z" fill="#232F3D" />
     </g>
 </symbol>
 </defs>
-<!-- Header -->
 <rect x="0" y="0" width="1280" height="720" fill="#ffffff"/>
-<rect x="48" y="36" width="4" height="64" fill="#ff9900"/>
+<rect x="48" y="36" width="4" height="64" fill="#8a939c"/>
 <text x="68" y="48" class="eyebrow" text-anchor="start">FIRECRAB  /  STUDENT Q&amp;A</text>
-<text x="68" y="92" class="diagram-title" text-anchor="start">학생 질문 게시판 아키텍처</text>
-<text x="68" y="124" class="subtitle" text-anchor="start">Docker 이미지로 준비하고, Firecrab 콘솔에서 공개·개선하는 서비스</text>
-<text x="1232" y="48" class="eyebrow" text-anchor="end">ARCHITECTURE PROPOSAL</text>
+<text x="68" y="92" class="diagram-title" text-anchor="start">Firecrab 배포 이전</text>
+<text x="68" y="124" class="subtitle" text-anchor="start">개발자 Mac의 Docker Compose에서만 실행하는 게시판</text>
+<text x="1232" y="48" class="eyebrow" text-anchor="end">BEFORE</text>
 
-<!-- Boundaries: the actual implementation, not AWS deployment targets. -->
-<rect x="424" y="208" width="612" height="228" fill="#fffaf2" stroke="#d78a18" stroke-width="1.5"/>
-<rect x="1060" y="208" width="180" height="228" fill="#f7faff" stroke="#507db0" stroke-width="1.5"/>
-<rect x="48" y="516" width="988" height="112" fill="#fafbfc" stroke="#aab2ba" stroke-width="1" stroke-dasharray="6 4"/>
+<!-- Boundaries -->
+<rect x="424" y="196" width="816" height="204" fill="#f7f8fa" stroke="#8a939c" stroke-width="1.5"/>
+<text x="440" y="222" class="zone-title" text-anchor="start">Docker Compose · 개발자 Mac</text>
+<rect x="48" y="516" width="1184" height="112" fill="#fafbfc" stroke="#aab2ba" stroke-width="1" stroke-dasharray="6 4"/>
 
-<!-- Section titles and zone captions -->
+<!-- Section titles -->
 <circle cx="60" cy="172" r="12" fill="#232f3e"/>
 <text x="60" y="177" class="section-number" text-anchor="middle">1</text>
-<text x="84" y="178" class="section-title" text-anchor="start">운영 주소와 게시판 서비스</text>
-<text x="440" y="236" class="zone-title" text-anchor="start">Firecrab 관리 호스트</text>
-<text x="1076" y="236" class="zone-title" text-anchor="start">데이터 저장소</text>
-<circle cx="60" cy="480" r="12" fill="#232f3e"/>
-<text x="60" y="485" class="section-number" text-anchor="middle">2</text>
-<text x="84" y="486" class="section-title" text-anchor="start">AI로 개선하고 새 버전 배포</text>
+<text x="84" y="178" class="section-title" text-anchor="start">로컬 실행 구조</text>
+<circle cx="60" cy="490" r="12" fill="#232f3e"/>
+<text x="60" y="495" class="section-number" text-anchor="middle">2</text>
+<text x="84" y="496" class="section-title" text-anchor="start">기능을 바꿀 때는 모두 직접 한다</text>
 
-<!-- Connections before nodes -->
-<path class="request-path" d="M 140 300 L 268 300" marker-end="url(#arrow)"/>
-<path class="request-path" d="M 340 300 L 472 300" marker-end="url(#arrow)"/>
-<path class="request-path" d="M 544 300 L 676 300" marker-end="url(#arrow)"/>
-<path class="request-path" d="M 748 300 L 884 300" marker-end="url(#arrow)"/>
-<path class="request-path" d="M 964 300 L 1116 300" marker-end="url(#arrow)"/>
-<path class="request-path" d="M 308 568 L 384 568" marker-end="url(#arrow)"/>
-<path class="request-path" d="M 620 568 L 704 568" marker-end="url(#arrow)"/>
-<path class="deploy-path" d="M 924 536 L 924 420" marker-end="url(#arrow-deploy)"/>
+<!-- Flows -->
+<path class="request-path" d="M 140 268 L 268 268" marker-end="url(#student-board-architecture-aws-arrow)"/>
+<path class="request-path" d="M 340 268 L 676 268" marker-end="url(#student-board-architecture-aws-arrow)"/>
+<path class="request-path" d="M 748 268 L 1116 268" marker-end="url(#student-board-architecture-aws-arrow)"/>
+<path d="M 140 396 L 236 396" fill="none" stroke="#d13212" stroke-width="1.5" stroke-dasharray="5 4"/>
+<path d="M 244 388 L 260 404 M 260 388 L 244 404" stroke="#d13212" stroke-width="2"/>
+<path class="request-path" d="M 402 572 L 466 572" marker-end="url(#student-board-architecture-aws-arrow)"/>
+<path class="request-path" d="M 804 572 L 868 572" marker-end="url(#student-board-architecture-aws-arrow)"/>
 
-<!-- Labels are separated from connector strokes -->
-<rect x="176.0" y="266" width="56" height="20" fill="#ffffff"/><text x="204" y="280" class="edge-label" text-anchor="middle">HTTPS</text>
-<rect x="378.0" y="266" width="56" height="20" fill="#ffffff"/><text x="406" y="280" class="edge-label" text-anchor="middle">HTTPS</text>
-<rect x="586.0" y="266" width="48" height="20" fill="#ffffff"/><text x="610" y="280" class="edge-label" text-anchor="middle">HTTP</text>
-<rect x="792.0" y="266" width="48" height="20" fill="#ffffff"/><text x="816" y="280" class="edge-label" text-anchor="middle">HTTP</text>
-<rect x="1020.0" y="266" width="40" height="20" fill="#ffffff"/><text x="1040" y="280" class="edge-label" text-anchor="middle">SQL</text>
-<rect x="314.0" y="534" width="64" height="20" fill="#ffffff"/><text x="346" y="548" class="edge-label" text-anchor="middle">소스 반영</text>
-<rect x="638.0" y="534" width="48" height="20" fill="#ffffff"/><text x="662" y="548" class="edge-label" text-anchor="middle">PUSH</text>
-<rect x="940" y="462" width="112" height="24" fill="#ffffff"/>
-<text x="948" y="479" class="edge-label" text-anchor="start">Deploy update</text>
+<rect x="180.0" y="234" width="48" height="20" fill="#ffffff"/><text x="204" y="248" class="edge-label" text-anchor="middle">HTTP</text>
+<rect x="522.0" y="234" width="76" height="20" fill="#ffffff"/><text x="560" y="248" class="edge-label" text-anchor="middle">3000:3000</text>
+<rect x="912.0" y="234" width="40" height="20" fill="#ffffff"/><text x="932" y="248" class="edge-label" text-anchor="middle">SQL</text>
+<text x="196" y="380" class="edge-label" text-anchor="middle" style="fill:#d13212">외부 주소 없음</text>
 
-<!-- Runtime components -->
-<use href="#icon-Users" x="76" y="272" width="56" height="56" aria-hidden="true"/>
-<text x="104" y="352" class="node-name" text-anchor="middle">학생·심사위원</text>
-<text x="104" y="376" class="sublabel" text-anchor="middle">링크·QR로 접속</text>
+<!-- Nodes -->
+<use href="#student-board-architecture-aws-icon-Users" x="76" y="240" width="56" height="56" aria-hidden="true"/>
+<text x="104" y="320" class="node-name" text-anchor="middle">개발자</text>
+<text x="104" y="344" class="sublabel" text-anchor="middle">같은 Mac의 브라우저</text>
+<use href="#student-board-architecture-aws-icon-Users" x="76" y="368" width="56" height="56" aria-hidden="true"/>
+<text x="104" y="448" class="node-name" text-anchor="middle">학생·심사위원</text>
+<use href="#student-board-architecture-aws-icon-Globe" x="276" y="240" width="56" height="56" aria-hidden="true"/>
+<text x="304" y="320" class="node-name" text-anchor="middle">로컬 주소</text>
+<text x="304" y="344" class="technical" text-anchor="middle">localhost:3000</text>
+<text x="304" y="368" class="sublabel" text-anchor="middle">이 Mac에서만 열림</text>
+<rect x="676" y="232" width="72" height="72" fill="#ffffff" stroke="#8a939c" stroke-width="2"/>
+<use href="#student-board-architecture-aws-icon-Generic-Application" x="684" y="240" width="56" height="56" aria-hidden="true"/>
+<text x="712" y="320" class="node-name" text-anchor="middle">app 컨테이너</text>
+<text x="712" y="344" class="sublabel" text-anchor="middle">Node.js · node:http</text>
+<rect x="628" y="360" width="168" height="24" rx="2" fill="#eef0f2" stroke="#c5cbd1" stroke-width="0.8"/>
+<text x="712" y="377" class="technical" text-anchor="middle">firecrab-demo-webapp:v1</text>
+<use href="#student-board-architecture-aws-icon-Database" x="1124" y="240" width="56" height="56" aria-hidden="true"/>
+<text x="1152" y="320" class="node-name" text-anchor="middle">PostgreSQL 17</text>
+<text x="1152" y="344" class="sublabel" text-anchor="middle">db 컨테이너</text>
+<text x="1152" y="368" class="technical" text-anchor="middle">볼륨 db-data</text>
 
-<use href="#icon-Globe" x="276" y="272" width="56" height="56" aria-hidden="true"/>
-<text x="304" y="352" class="node-name" text-anchor="middle">고정 운영 주소</text>
-<text x="304" y="376" class="technical" text-anchor="middle">*.firecrab.dev</text>
-<text x="304" y="400" class="sublabel" text-anchor="middle">Firecrab 연결 서비스</text>
+<!-- Manual change loop -->
+<rect x="72" y="536" width="330" height="72" fill="#ffffff" stroke="#c5cbd1" stroke-width="1"/>
+<use href="#student-board-architecture-aws-icon-Source-Code" x="88" y="548" width="40" height="40" aria-hidden="true"/>
+<text x="144" y="564" class="node-name" text-anchor="start">코드 수정</text>
+<text x="144" y="588" class="sublabel" text-anchor="start">에디터에서 개발자가 직접 고친다</text>
+<rect x="474" y="536" width="330" height="72" fill="#ffffff" stroke="#c5cbd1" stroke-width="1"/>
+<use href="#student-board-architecture-aws-icon-Toolkit" x="490" y="548" width="40" height="40" aria-hidden="true"/>
+<text x="546" y="564" class="node-name" text-anchor="start">테스트</text>
+<text x="546" y="588" class="technical" text-anchor="start">npm test</text>
+<rect x="876" y="536" width="330" height="72" fill="#ffffff" stroke="#c5cbd1" stroke-width="1"/>
+<use href="#student-board-architecture-aws-icon-Server" x="892" y="548" width="40" height="40" aria-hidden="true"/>
+<text x="948" y="564" class="node-name" text-anchor="start">다시 빌드·실행</text>
+<text x="948" y="588" class="technical" text-anchor="start">docker compose up --build</text>
 
-<use href="#icon-Internet" x="480" y="272" width="56" height="56" aria-hidden="true"/>
-<text x="508" y="352" class="node-name" text-anchor="middle">Quick Tunnel</text>
-<text x="508" y="376" class="sublabel" text-anchor="middle">Cloudflare</text>
-<text x="508" y="400" class="technical" text-anchor="middle">cloudflared</text>
-
-<use href="#icon-Server" x="684" y="272" width="56" height="56" aria-hidden="true"/>
-<text x="712" y="352" class="node-name" text-anchor="middle">Nginx</text>
-<text x="712" y="376" class="sublabel" text-anchor="middle">서비스 경로 연결</text>
-
-<rect x="888" y="264" width="72" height="72" rx="0" fill="#ffffff" stroke="#d78a18" stroke-width="2"/>
-<use href="#icon-Generic-Application" x="896" y="272" width="56" height="56" aria-hidden="true"/>
-<text x="924" y="352" class="node-name" text-anchor="middle">게시판 MicroVM</text>
-<text x="924" y="376" class="sublabel" text-anchor="middle">Node.js · node:http</text>
-<rect x="840" y="392" width="168" height="24" rx="2" fill="#fff1d6" stroke="#e8c78c" stroke-width="0.8"/>
-<text x="924" y="409" class="technical" text-anchor="middle">firecrab-demo-webapp:v2</text>
-
-<use href="#icon-Database" x="1124" y="272" width="56" height="56" aria-hidden="true"/>
-<text x="1152" y="352" class="node-name" text-anchor="middle">PostgreSQL</text>
-<text x="1152" y="376" class="sublabel" text-anchor="middle">질문·추천 저장</text>
-<text x="1152" y="400" class="sublabel" text-anchor="middle">앱과 별도 데이터 보존</text>
-
-<!-- Build and improvement path -->
-<rect x="72" y="536" width="236" height="72" fill="#ffffff" stroke="#c5cbd1" stroke-width="1"/>
-<use href="#icon-Source-Code" x="88" y="548" width="40" height="40" aria-hidden="true"/>
-<text x="144" y="564" class="node-name" text-anchor="start">AI Sandbox</text>
-<text x="144" y="588" class="sublabel" text-anchor="start">수정·테스트·미리보기</text>
-
-<rect x="384" y="536" width="236" height="72" fill="#ffffff" stroke="#c5cbd1" stroke-width="1"/>
-<use href="#icon-Toolkit" x="400" y="548" width="40" height="40" aria-hidden="true"/>
-<text x="456" y="564" class="node-name" text-anchor="start">Docker Build</text>
-<text x="456" y="588" class="sublabel" text-anchor="start">반영한 코드로 이미지 생성</text>
-
-<rect x="704" y="536" width="304" height="72" fill="#ffffff" stroke="#c5cbd1" stroke-width="1"/>
-<use href="#icon-Folders" x="720" y="548" width="40" height="40" aria-hidden="true"/>
-<text x="776" y="564" class="node-name" text-anchor="start">OCI 이미지 저장소</text>
-<text x="776" y="588" class="technical" text-anchor="start">firecrab-demo-webapp:v2</text>
-
-<!-- Brief implementation notes and legend -->
-<text x="48" y="652" class="sublabel" text-anchor="start">로컬 확인: Docker Compose로 게시판 앱 + PostgreSQL 실행</text>
-<text x="1232" y="652" class="sublabel" text-anchor="end">AI 미리보기는 별도 DB 사용</text>
+<!-- Footer -->
+<text x="48" y="652" class="sublabel" text-anchor="start">한계: 외부 접속 주소 없음 · 배포 전 미리보기 없음 · 실행 상태를 직접 확인</text>
+<text x="1232" y="652" class="sublabel" text-anchor="end">이 Docker 이미지를 Firecrab에 그대로 배포한다</text>
 <line x1="48" y1="672" x2="1232" y2="672" stroke="#d5d9dd" stroke-width="1"/>
-<path d="M 48 694 H 80" class="request-path" marker-end="url(#arrow)"/>
+<path d="M 48 694 H 80" class="request-path" marker-end="url(#student-board-architecture-aws-arrow)"/>
 <text x="92" y="698" class="legend" text-anchor="start">접속·데이터 흐름</text>
-<path d="M 236 694 H 268" class="deploy-path" marker-end="url(#arrow-deploy)"/>
-<text x="280" y="698" class="legend" text-anchor="start">이미지 배포</text>
-<text x="1232" y="698" class="source-note" text-anchor="end">AWS General Resource Icons · Cloudflare / Firecrab / PostgreSQL 구성</text>
-</svg></div></main></body></html>
+<path d="M 236 694 H 268" fill="none" stroke="#d13212" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="280" y="698" class="legend" text-anchor="start">접속 불가</text>
+<text x="1232" y="698" class="source-note" text-anchor="end">AWS General Resource Icons · Docker Compose / PostgreSQL 구성</text>
+</svg>
