@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>학생 질문 게시판</title>
+<style>
+  :root { --bg: #f6f7f9; --card: #fff; --line: #dde1e6; --text: #1f2328; --muted: #656d76; --accent: #0969da; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; background: var(--bg); color: var(--text); }
+  main { max-width: 720px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.4rem; margin: 8px 0 16px; }
+  form { display: grid; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+  input, textarea { width: 100%; font: inherit; padding: 10px; border: 1px solid var(--line); border-radius: 6px; }
+  textarea { min-height: 72px; resize: vertical; }
+  button { font: inherit; padding: 10px 16px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; cursor: pointer; }
+  button:disabled { opacity: .6; }
+  .error { color: #cf222e; font-size: .9rem; min-height: 1.2em; }
+  ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+  .meta { color: var(--muted); font-size: .85rem; margin-bottom: 4px; }
+  .empty { color: var(--muted); text-align: center; padding: 24px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>학생 질문 게시판</h1>
+  <form id="form">
+    <input id="name" name="name" placeholder="이름" maxlength="20" required>
+    <textarea id="question" name="question" placeholder="질문을 입력하세요" maxlength="200" required></textarea>
+    <button id="submit" type="submit">질문 올리기</button>
+    <div id="error" class="error"></div>
+  </form>
+  <ol id="list"><li class="empty">불러오는 중…</li></ol>
+</main>
+<script>
+  const list = document.getElementById('list');
+  const form = document.getElementById('form');
+  const errorBox = document.getElementById('error');
+  const submit = document.getElementById('submit');
+  const POLL_MS = 3000;
+  let timer = null;
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function render(questions) {
+    if (!questions.length) {
+      list.innerHTML = '<li class="empty">아직 질문이 없습니다.</li>';
+      return;
+    }
+    list.innerHTML = questions.map((q, i) => `
+      <li data-id="${q.id}">
+        <div class="meta">#${i + 1} · ${escapeHtml(q.name)} · ${new Date(q.created_at).toLocaleTimeString('ko-KR')}</div>
+        <div>${escapeHtml(q.question)}</div>
+      </li>`).join('');
+  }
+
+  async function load() {
+    try {
+      const res = await fetch('/api/questions');
+      const data = await res.json();
+      render(data.questions);
+    } catch {
+      /* keep the last rendered list */
+    }
+  }
+
+  function startPolling() {
+    stopPolling();
+    load();
+    timer = setInterval(load, POLL_MS);
+  }
+  function stopPolling() {
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    document.hidden ? stopPolling() : startPolling();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.textContent = '';
+    submit.disabled = true;
+    try {
+      const res = await fetch('/api/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: form.name.value, question: form.question.value }),
+      });
+      const data = await res.json();
+      if (!res.ok) { errorBox.textContent = data.error || '전송에 실패했습니다.'; return; }
+      form.question.value = '';
+      await load();
+    } catch {
+      errorBox.textContent = '전송에 실패했습니다.';
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+  startPolling();
+</script>
+</body>
+</html>
